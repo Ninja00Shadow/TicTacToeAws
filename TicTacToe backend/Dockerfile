@@ -1,7 +1,7 @@
 FROM python:3.10.6
 
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1 #stdout and stderr streams are seen in real time
+ENV PYTHONDONTWRITEBYTECODE=1 #stops generating bytecode (.pyc)
 
 WORKDIR /backend
 
