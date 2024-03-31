@@ -1,7 +1,11 @@
 FROM python:3.10.6
 
-ENV PYTHONUNBUFFERED=1 #stdout and stderr streams are seen in real time
-ENV PYTHONDONTWRITEBYTECODE=1 #stops generating bytecode (.pyc)
+ARG BACKEND_PORT
+
+# stdout and stderr streams are seen in real time
+ENV PYTHONUNBUFFERED=1
+# stops generating bytecode (.pyc)
+ENV PYTHONDONTWRITEBYTECODE=1
 
 WORKDIR /backend
 
@@ -13,4 +17,4 @@ COPY . /backend/
 
 RUN python manage.py migrate
 
-EXPOSE 8000
+EXPOSE ${BACKEND_PORT}

@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  backend:
+    container_name: backend
+    build:
+      context: ./TicTacToe backend
+      args:
+        BACKEND_PORT: ${BACKEND_PORT}
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    env_file:
+      - .env
+    volumes:
+      - ./TicTacToe backend:/app
+    stdin_open: true
+    tty: true
+    command: bash -c "python manage.py runserver 0.0.0.0:${BACKEND_PORT}"
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./tictactoe-frontend
+      args:
+        FRONTEND_PORT: ${FRONTEND_PORT}
+    ports:
+      - "${EXPOSED_FRONTEND_PORT}:${FRONTEND_PORT}"
+    env_file:
+      - .env
+    volumes:
+      - ./tictactoe-frontend:/app
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+
+networks:
+  default:
+    driver: bridge
+
+  
