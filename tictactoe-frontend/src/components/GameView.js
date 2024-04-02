@@ -9,8 +9,8 @@ import { useParams } from 'react-router-dom';
   const GameView = () => {
     const { roomID, playerName } = useParams();
     console.log(roomID, playerName)
-    const ws_url = `ws://localhost:8000/ws/game/${roomID}/`
-    const ws = new WebSocket(`ws://localhost:8000/ws/game/${roomID}/`);
+    const ws_url = `ws://${process.env.REACT_APP_API_IP}:8000/ws/game/${roomID}/`
+    const ws = new WebSocket(ws_url);
 
   useEffect(() => {
 
@@ -79,7 +79,7 @@ import { useParams } from 'react-router-dom';
         playerLetter = data.my_turn ? "X" : "O"
         resetBoard()
         turnElm.innerHTML = myTurn ? "Your Turn" : "Opponent's Turn"
-        opponentTxt.innerHTML = data.players[0] === "{{name}}" ? data.players[1] : data.players[0]
+        opponentTxt.innerHTML = data.players[0] === playerName ? data.players[1] : data.players[0]
       }
       else if (data.event === "boardData_send") {
         board = data.board

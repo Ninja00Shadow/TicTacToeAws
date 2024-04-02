@@ -4,6 +4,8 @@ import './IndexView.css';
 import axios from 'axios';
 import { Redirect, redirect} from 'react-router-dom';
 
+const backendUrl = `http://${process.env.REACT_APP_API_IP}:8000`;
+
 class IndexView extends React.Component {
   constructor(props) {
     super(props);
@@ -22,7 +24,7 @@ class IndexView extends React.Component {
     }
 
     try {
-      const response = await axios.post('http://localhost:8000', { 
+      const response = await axios.post(backendUrl, { 
         'player-name': playerName 
       });
       console.log(response);

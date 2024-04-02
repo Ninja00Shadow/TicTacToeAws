@@ -1,9 +1,16 @@
-FROM node:17-alpine
+FROM node:17-alpine as build
 ARG FRONTEND_PORT
+ARG BACKEND_IP
 WORKDIR /frontend
 COPY . .
 RUN npm install
-RUN npm run build
+RUN REACT_APP_API_IP=${BACKEND_IP} npm run build
 
 EXPOSE ${FRONTEND_PORT}
-CMD ["npm", "start"]
+# CMD ["npm", "start"]
+
+FROM nginx:alpine
+COPY --from=build /frontend/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
