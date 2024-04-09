@@ -25,12 +25,10 @@ services:
         FRONTEND_PORT: ${FRONTEND_PORT}
         BACKEND_IP: ${API_IP}
     ports:
-      # - "${EXPOSED_FRONTEND_PORT}:${FRONTEND_PORT}"
       - "80:80"
     env_file:
       - .env
     # volumes:
-      # - ./tictactoe-frontend:/app
     stdin_open: true
     tty: true
     depends_on:
