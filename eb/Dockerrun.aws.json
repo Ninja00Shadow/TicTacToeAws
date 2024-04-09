@@ -1,27 +1,16 @@
 {
-    "AWSEBDockerrunVersion": 2,
+    "AWSEBDockerrunVersion": 3,
     "containerDefinitions": [
       {
         "name": "backend",
-        "image": "./TicTacToe backend",
-        "essential": true,
-        "memory": 512,
-        "environment": [
-          {
-            "name": "BACKEND_PORT",
-            "value": "8000"
-          }
-        ],
-        "portMappings": [
-          {
-            "hostPort": 8000,
-            "containerPort": 8000
-          }
-        ]
+        "image": "ninjashadow/tictactoe:backend",
+        "update": "true",
+        "essential": true
       },
       {
         "name": "frontend",
-        "image": "./tictactoe-frontend",
+        "image": "ninjashadow/tictactoe:frontend",
+        "update": "true",
         "essential": true,
         "memory": 512,
         "portMappings": [
@@ -32,16 +21,6 @@
         ],
         "links": [
           "backend"
-        ],
-        "environment": [
-          {
-            "name": "FRONTEND_PORT",
-            "value": "80"
-          },
-          {
-            "name": "BACKEND_IP",
-            "value": "0.0.0.0"
-          }
         ]
       }
     ]

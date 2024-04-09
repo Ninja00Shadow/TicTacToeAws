@@ -15,16 +15,6 @@ resource "aws_s3_bucket" "tictactoe-bucket" {
   bucket = "tictactoe-bucket"
 }
 
-# resource "null_resource" "zip_archive" {
-#   triggers = {
-#     always_run = "${timestamp()}"
-#   }
-
-#   provisioner "local-exec" {
-#     command = "powershell -File ${path.module}/create_zip.ps1"
-#   }
-# }
-
 resource "aws_iam_instance_profile" "ec2_eb_profile" {
   name = "tictactoe-ec2-profile"
   # role = aws_iam_role.eb_ec2_role.name
@@ -56,11 +46,10 @@ resource "aws_iam_instance_profile" "ec2_eb_profile" {
 
 
 resource "aws_s3_object" "tictactoe-app" {
-  # depends_on = [null_resource.zip_archive]
   bucket = aws_s3_bucket.tictactoe-bucket.bucket
-  key    = "TicTacToeAws.zip"
-  source = "../TicTacToeAws.zip"
-  etag = filemd5("../TicTacToeAws.zip")
+  key    = "docker-compose.yaml"
+  source = "./docker-compose.yaml"
+  etag = filemd5("./docker-compose.yaml")
 }
 
 
