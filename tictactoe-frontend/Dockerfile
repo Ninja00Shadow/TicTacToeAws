@@ -1,12 +1,10 @@
 FROM node:17-alpine as build
-ARG FRONTEND_PORT
 ARG BACKEND_IP
 WORKDIR /frontend
 COPY . .
 RUN npm install -fetch-timeout=240000
 RUN REACT_APP_API_IP=${BACKEND_IP} npm run build
 
-EXPOSE ${FRONTEND_PORT}
 # CMD ["npm", "start"]
 
 FROM nginx:alpine
