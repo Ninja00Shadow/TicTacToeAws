@@ -17,44 +17,20 @@ resource "aws_s3_bucket" "tictactoe-bucket" {
 
 resource "aws_iam_instance_profile" "ec2_eb_profile" {
   name = "tictactoe-ec2-profile"
-  # role = aws_iam_role.eb_ec2_role.name
   role = "LabRole"
 }
-
-# resource "aws_iam_role" "eb_ec2_role" {
-#   name = "tictactoe-ec2-role"
-
-#   assume_role_policy = jsonencode({
-#     Version = "2012-10-17",
-#     Statement = [
-#       {
-#         Effect = "Allow",
-#         Principal = {
-#           Service = "ec2.amazonaws.com",
-#         },
-#         Action = "sts:AssumeRole",
-#       },
-#     ],
-#   })
-# }
-
-# resource "aws_iam_role_policy_attachment" "eb_ec2_policy" {
-#   role       = aws_iam_role.eb_ec2_role.name
-#   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkFullAccess"
-# }
-
 
 
 resource "aws_s3_object" "tictactoe-app" {
   bucket = aws_s3_bucket.tictactoe-bucket.bucket
   key    = "docker-compose.yaml"
   source = "./docker-compose.yaml"
-  etag = filemd5("./docker-compose.yaml")
+  etag   = filemd5("./docker-compose.yaml")
 }
 
 
 resource "aws_elastic_beanstalk_application" "tictactoe-eb" {
-  name = var.name_tag
+  name        = var.name_tag
   description = "Tic Tac Toe Application"
 }
 
@@ -74,36 +50,9 @@ resource "aws_elastic_beanstalk_environment" "tictactoe-eb-env" {
   version_label = aws_elastic_beanstalk_application_version.tictactoe_version.name
 
   setting {
-    namespace = "aws:ec2:vpc"
-    name      = "VPCId"
-    value     = var.vpc_id
-  }
-  setting {
     namespace = "aws:autoscaling:launchconfiguration"
     name      = "IamInstanceProfile"
-    # value     = "aws-elasticbeanstalk-ec2-role"
-    value = aws_iam_instance_profile.ec2_eb_profile.name
-  }
-  setting {
-    namespace = "aws:ec2:vpc"
-    name      = "AssociatePublicIpAddress"
-    value     = "True"
-  }
-
-  setting {
-    namespace = "aws:ec2:vpc"
-    name      = "Subnets"
-    value     = join(",", var.public_subnets)
-  }
-  setting {
-    namespace = "aws:elasticbeanstalk:application:environment"
-    name      = "NODE_ENV"
-    value     = "production"
-  }
-  setting {
-    namespace = "aws:elasticbeanstalk:environment"
-    name      = "EnvironmentType"
-    value     = "LoadBalanced"
+    value     = aws_iam_instance_profile.ec2_eb_profile.name
   }
   setting {
     namespace = "aws:autoscaling:launchconfiguration"
@@ -111,9 +60,39 @@ resource "aws_elastic_beanstalk_environment" "tictactoe-eb-env" {
     value     = var.instance_type
   }
   setting {
+    namespace = "aws:autoscaling:launchconfiguration"
+    name      = "SecurityGroups"
+    value     = join(",", var.security_groups)
+  }
+  setting {
+    namespace = "aws:ec2:vpc"
+    name      = "VPCId"
+    value     = var.vpc_id
+  }
+  setting {
+    namespace = "aws:ec2:vpc"
+    name      = "AssociatePublicIpAddress"
+    value     = "True"
+  }
+  setting {
+    namespace = "aws:ec2:vpc"
+    name      = "Subnets"
+    value     = join(",", var.public_subnets)
+  }
+  setting {
     namespace = "aws:ec2:vpc"
     name      = "ELBScheme"
     value     = "internet facing"
+  }
+  setting {
+    namespace = "aws:elasticbeanstalk:application:environment"
+    name      = "PORT"
+    value     = var.app_port
+  }
+  setting {
+    namespace = "aws:elasticbeanstalk:environment"
+    name      = "EnvironmentType"
+    value     = "LoadBalanced"
   }
   setting {
     namespace = "aws:autoscaling:asg"

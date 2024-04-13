@@ -2,25 +2,26 @@
     "AWSEBDockerrunVersion": 3,
     "containerDefinitions": [
       {
-        "name": "backend",
-        "image": "ninjashadow/tictactoe:backend",
-        "update": "true",
-        "essential": true
+        "Image": {
+          "Name": "ninjashadow/tictactoe:backend"
+        },
+        "Ports": [
+          {
+            "hostPort": 8000,
+            "containerPort": 8000
+          }
+        ],
+        "Command": ["bash", "-c", "python manage.py runserver 0.0.0.0:8000"]
       },
       {
-        "name": "frontend",
-        "image": "ninjashadow/tictactoe:frontend",
-        "update": "true",
-        "essential": true,
-        "memory": 512,
-        "portMappings": [
+        "Image": {
+          "Name": "ninjashadow/tictactoe:frontend_v1.1"
+        },
+        "Ports": [
           {
             "hostPort": 80,
             "containerPort": 80
           }
-        ],
-        "links": [
-          "backend"
         ]
       }
     ]

@@ -4,7 +4,8 @@ services:
     image: ninjashadow/tictactoe:backend
     ports:
       - "8000:8000"
+    command: bash -c "python manage.py runserver 0.0.0.0:8000"
   frontend:
-    image: ninjashadow/tictactoe:frontend
+    image: ninjashadow/tictactoe:frontend_v1.2
     ports:
       - "80:80"
