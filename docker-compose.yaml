@@ -24,7 +24,7 @@ services:
       context: ./tictactoe-frontend
       args:
         BACKEND_IP: ${API_IP}
-    image: ninjashadow/tictactoe:frontend_v1.3
+    image: ninjashadow/tictactoe:frontend_v1.4
     ports:
       - "80:80"
     env_file:

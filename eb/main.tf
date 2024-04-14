@@ -85,11 +85,6 @@ resource "aws_elastic_beanstalk_environment" "tictactoe-eb-env" {
     value     = "internet facing"
   }
   setting {
-    namespace = "aws:elasticbeanstalk:application:environment"
-    name      = "PORT"
-    value     = var.app_port
-  }
-  setting {
     namespace = "aws:elasticbeanstalk:environment"
     name      = "EnvironmentType"
     value     = "LoadBalanced"

@@ -18,21 +18,21 @@ resource "aws_ecs_cluster" "fargate_cluster" {
 resource "aws_ecs_task_definition" "fargate_task" {
   family = var.app_name
   cpu = "512"
-  memory = "2048"
+  memory = "1024"
   network_mode = "awsvpc"
   requires_compatibilities = [ "FARGATE" ]
   execution_role_arn = "arn:aws:iam::236293649068:role/LabRole"
 
   container_definitions = jsonencode([
     {
-      name = var.app_name
-      image = var.docker_image
+      name = "${var.app_name}-backend"
+      image = var.backend_image
       essential = true
 
       portMappings = [
         {
-          containerPort = var.app_port
-          hostPort = var.app_port
+          containerPort = var.backend_port
+          hostPort = var.backend_port
           protocol = "tcp"
         }
       ]
@@ -40,21 +40,52 @@ resource "aws_ecs_task_definition" "fargate_task" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          "awslogs-group" = "/ecs/${var.app_name}"
+          "awslogs-group" = "/ecs/${var.app_name}-backend"
           "awslogs-region" = var.region
-          "awslogs-stream-prefix" = "ecs"
+          "awslogs-stream-prefix" = "backend"
+        }
+      }
+    },
+    {
+      name = "${var.app_name}-frontend"
+      image = var.frontend_image
+      essential = true
+
+      portMappings = [
+        {
+          containerPort = var.frontend_port
+          hostPort = var.frontend_port
+          protocol = "tcp"
+        }
+      ]
+
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group" = "/ecs/${var.app_name}-frontend"
+          "awslogs-region" = var.region
+          "awslogs-stream-prefix" = "frontend"
         }
       }
     }
   ])
 }
 
-resource "aws_cloudwatch_log_group" "ecs_log_group" {
-  name = "/ecs/${var.app_name}"
+resource "aws_cloudwatch_log_group" "ecs_log_group1" {
+  name = "/ecs/${var.app_name}-frontend"
   retention_in_days = 7
 
   tags = {
-    Name = "ECSLogs-${var.app_name}"
+    Name = "ECSLogs-${var.app_name}-frontend"
+  }
+}
+
+resource "aws_cloudwatch_log_group" "ecs_log_group2" {
+  name = "/ecs/${var.app_name}-backend"
+  retention_in_days = 7
+
+  tags = {
+    Name = "ECSLogs-${var.app_name}-backend"
   }
 }
 
@@ -73,38 +104,16 @@ resource "aws_ecs_service" "fargate_service" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.fargate_target_group.arn
-    container_name = var.app_name
-    container_port = var.app_port
-  } 
-
-  depends_on = [ aws_lb.fargate_lb ]
-}
-
-resource "aws_lb" "fargate_lb" {
-  name = var.lb_name
-  security_groups = [aws_security_group.fargate_sg.id]
-  subnets = [aws_subnet.fargate_subnet1.id, aws_subnet.fargate_subnet2.id]
-}
-
-resource "aws_lb_target_group" "fargate_target_group" {
-  name = var.app_name
-  port = 80
-  protocol = "HTTP"
-  target_type = "ip"
-  vpc_id = aws_vpc.fargate_vpc.id
-
-  depends_on = [ aws_lb.fargate_lb ]
-}
-
-resource "aws_lb_listener" "fargate_lb_listener" {
-  load_balancer_arn = aws_lb.fargate_lb.arn
-  port = 80
-  protocol = "HTTP"
-
-  default_action {
-    type = "forward"
-    target_group_arn = aws_lb_target_group.fargate_target_group.arn
+    container_name = "${var.app_name}-frontend"
+    container_port = var.frontend_port
   }
+  
+  load_balancer {
+    target_group_arn = aws_lb_target_group.backend_target_group.arn
+    container_name = "${var.app_name}-backend"
+    container_port = var.backend_port
+  }
+  
 
   depends_on = [ aws_lb.fargate_lb ]
 }

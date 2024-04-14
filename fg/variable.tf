@@ -19,13 +19,24 @@ variable "desired_count" {
   default = 1
 }
 
-variable "docker_image" {
+variable "frontend_image" {
   type = string
 }
 
-variable "app_port" {
+variable "backend_image" {
+  type = string
+  
+}
+
+variable "frontend_port" {
   type    = number
   default = 80
+}
+
+variable "backend_port" {
+  type    = number
+  default = 8000
+  
 }
 
 variable "lb_name" {
