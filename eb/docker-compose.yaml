@@ -6,6 +6,6 @@ services:
       - "8000:8000"
     command: bash -c "python manage.py runserver 0.0.0.0:8000"
   frontend:
-    image: ninjashadow/tictactoe:frontend_v1.2
+    image: ninjashadow/tictactoe:frontend_v1.4
     ports:
       - "80:80"

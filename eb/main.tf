@@ -71,11 +71,6 @@ resource "aws_elastic_beanstalk_environment" "tictactoe-eb-env" {
   }
   setting {
     namespace = "aws:ec2:vpc"
-    name      = "AssociatePublicIpAddress"
-    value     = "True"
-  }
-  setting {
-    namespace = "aws:ec2:vpc"
     name      = "Subnets"
     value     = join(",", var.public_subnets)
   }
@@ -83,6 +78,11 @@ resource "aws_elastic_beanstalk_environment" "tictactoe-eb-env" {
     namespace = "aws:ec2:vpc"
     name      = "ELBScheme"
     value     = "internet facing"
+  }
+  setting {
+    namespace = "aws:ec2:vpc"
+    name      = "AssociatePublicIpAddress"
+    value     = "true"
   }
   setting {
     namespace = "aws:elasticbeanstalk:environment"
