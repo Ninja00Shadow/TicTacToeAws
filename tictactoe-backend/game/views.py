@@ -6,10 +6,16 @@ from django.contrib import messages
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from game.serializers import RoomSerializer
+from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import RetrieveModelMixin
+from rest_framework.permissions import IsAuthenticated
+
+from game.serializers import UserSerializer
 
 
 class IndexView(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request):
         return Response(status=status.HTTP_200_OK)
 
@@ -83,3 +89,17 @@ class GameView(APIView):
 #     else:
 #         return render(request, "game.html", {"room": room, "name": name})
 
+
+class UserProfileAPIView(RetrieveModelMixin, GenericAPIView):
+    serializer_class = UserSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self):
+        return self.request.user
+
+    def get(self, request, *args, **kwargs):
+        """
+        User profile
+        Get profile of current logged in user.
+        """
+        return self.retrieve(request, *args, **kwargs)

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { CookiesProvider, useCookies } from 'react-cookie';
 import IndexView from './components/IndexView';
 import GameView from './components/GameView';
 import Signup from './components/Signup';
@@ -9,23 +10,23 @@ import './App.css';
 import userpool from './userpool';
 
 function App() {
+  const [token] = useCookies(['user-token']);
 
   useEffect(() => {
-    let user = userpool.getCurrentUser();
-    if (!user) {
-      <Navigate to="/login" />
-    }
+    console.log(token['user-token']);
   }, []);
 
   return (
-    <Router>
-      <Routes>
-        <Route exact path="/" element={<IndexView />} />
-        <Route path="/game/:roomID/:playerName" element={<GameView />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </Router>
+    <CookiesProvider>
+      <Router>
+        <Routes>
+          <Route exact path="/" element={!!token['user-token'] ? <IndexView /> : <Navigate to="/login" replace />} />
+          <Route path="/game/:roomID/:playerName" element={!!token['user-token'] ? <GameView /> : <Navigate to="/login" replace />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </Router>
+    </CookiesProvider>
   );
 }
 

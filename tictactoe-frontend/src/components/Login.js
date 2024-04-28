@@ -2,8 +2,11 @@ import React, { useState } from 'react'
 import { Button, TextField,Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom';
 import { authenticate } from '../services/authenticate';
+import { useCookies } from 'react-cookie';
 
 const Login = () => {
+  const [token, setToken] = useCookies(['user-token']);
+  const [refreshToken, setRefreshToken] = useCookies(['refresh-token']);
 
   const Navigate = useNavigate();
 
@@ -56,6 +59,8 @@ const Login = () => {
           authenticate(username,password)
           .then((data)=>{
             setLoginErr('');
+            setToken('user-token',data.accessToken.jwtToken,{path:'/', maxAge:3600 * 24 * 30});
+            setRefreshToken('refresh-token',data.refreshToken.token,{path:'/', maxAge:3600 * 24 * 30});
             Navigate('/');
           },(err)=>{
             console.log(err);

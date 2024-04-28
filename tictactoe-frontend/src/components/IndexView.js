@@ -1,65 +1,65 @@
 import React, { useState } from 'react';
 import './IndexView.css';
+import axios from '../axiosConfig';
+import { useNavigate } from 'react-router-dom';
+import userPool from '../userpool';
 
-import axios from 'axios';
-import { Redirect, redirect} from 'react-router-dom';
+const backendUrl = !!process.env.REACT_APP_BACKEND_URL ? 'http://${process.env.REACT_APP_API_IP}:8000' : 'http://localhost:8000';
 
-const backendUrl = `http://${process.env.REACT_APP_API_IP}:8000`;
+const IndexView = () => {
+  const navigate = useNavigate();
 
-class IndexView extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      playerName: '',
-      roomID: null
-    };
-  }
+  const [playerName, setPlayerName] = useState('');
 
-  handleSubmit = async (e) => {
+  const logout = () => {
+    this.cookies.remove('user-token');
+    const cognitoUser = userPool.getCurrentUser();
+    if (cognitoUser) {
+      cognitoUser.signOut();
+    }
+    navigate('/login');
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const { playerName } = this.state;
     if (playerName.trim() === '') {
       alert('Please enter a valid name.');
       return;
     }
 
     try {
-      const response = await axios.post(backendUrl, { 
-        'player-name': playerName 
+      const response = await axios.post('', {
+        'player-name': playerName
       });
       console.log(response);
 
       if (response.status === 200) {
         window.location.href = `/game/${response.data.id}/${playerName}`;
       }
-      
+
     } catch (error) {
       console.error('Error:', error);
-      // Tutaj możesz obsłużyć błąd, np. wyświetlając komunikat dla użytkownika
     }
   };
 
-  handleChange = (e) => {
-    this.setState({ playerName: e.target.value });
+  const handleChange = (e) => {
+    setPlayerName(e.target.value);
   };
 
-  render() {
-    const { playerName } = this.state;
-
-    return (
-      <div className="wrapper">
-        <form className="form" onSubmit={this.handleSubmit}>
-          <input
-            type="text"
-            value={playerName}
-            onChange={this.handleChange}
-            placeholder="Enter Your Name"
-          />
-          <button type="submit">Play</button>
-        </form>
-      </div>
-    );
-  }
+  return (
+    <div className="wrapper">
+      <button onClick={logout} className='logoutButton'>Logout</button>
+      <form className="form" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={playerName}
+          onChange={handleChange}
+          placeholder="Enter Your Name"
+        />
+        <button type="submit">Play</button>
+      </form>
+    </div>
+  );
 }
 
 export default IndexView;
