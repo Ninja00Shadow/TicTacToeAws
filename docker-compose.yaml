@@ -4,7 +4,7 @@ services:
   backend:
     container_name: backend
     build:
-      context: ./TicTacToe backend
+      context: ./tictactoe-backend
       args:
         BACKEND_PORT: ${BACKEND_PORT}
     image: ninjashadow/tictactoe:backend

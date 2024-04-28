@@ -5,17 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9b15246d-856d-45a1-a300-68f68bce7014" name="Changes" comment="frontend version">
-      <change beforePath="$PROJECT_DIR$/../TicTacToe2.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../TicTacToeAws.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tictactoe-backend/.idea/tictactoe-backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/.idea/tictactoe-backend.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tictactoe-backend/TicTacToe/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/TicTacToe/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tictactoe-backend/core/api/jwt.py" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/core/api/jwt.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tictactoe-backend/game/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/game/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tictactoe-backend/game/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/game/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tictactoe-backend/game/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/game/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tictactoe-backend/game/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/game/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tictactoe-backend/game/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/game/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tictactoe-backend/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../docker-compose.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -149,7 +140,7 @@
       <workItem from="1713702872065" duration="1007000" />
       <workItem from="1713703907894" duration="14337000" />
       <workItem from="1713791698713" duration="25000" />
-      <workItem from="1714308249609" duration="7327000" />
+      <workItem from="1714308249609" duration="8511000" />
     </task>
     <task id="LOCAL-00001" summary="init, ws in memory">
       <option name="closed" value="true" />
