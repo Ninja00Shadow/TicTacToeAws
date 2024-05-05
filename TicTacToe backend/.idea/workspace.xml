@@ -5,14 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9b15246d-856d-45a1-a300-68f68bce7014" name="Changes" comment="frontend version">
-      <change beforePath="$PROJECT_DIR$/../.env" beforeDir="false" afterPath="$PROJECT_DIR$/../.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/0f0c9efe-2e4b-4c60-9af8-07489f128165.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/0f0c9efe-2e4b-4c60-9af8-07489f128165.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/8210302f-da51-4a0e-97ba-d11984de00f2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/8210302f-da51-4a0e-97ba-d11984de00f2/storage_v2/_src_/schema/main.uQUzAA.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../docker-compose.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tictactoe-frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-frontend/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tictactoe-backend/TicTacToe/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/TicTacToe/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tictactoe-backend/core/api/jwt.py" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/core/api/jwt.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tictactoe-backend/game/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/game/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tictactoe-backend/game/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/game/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tictactoe-backend/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -149,6 +147,7 @@
       <workItem from="1714308249609" duration="9635000" />
       <workItem from="1714396921007" duration="41000" />
       <workItem from="1714918319223" duration="2007000" />
+      <workItem from="1714936157347" duration="4309000" />
     </task>
     <task id="LOCAL-00001" summary="init, ws in memory">
       <option name="closed" value="true" />

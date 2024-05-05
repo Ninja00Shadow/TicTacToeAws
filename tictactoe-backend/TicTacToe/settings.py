@@ -33,7 +33,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'daphne',
-
+    'django_extensions',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -50,7 +50,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',  # RemoteUserMiddleware
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.RemoteUserMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -154,15 +154,10 @@ AUTH_USER_MODEL = 'game.User'
 
 COGNITO_AWS_REGION = 'us-east-1'
 COGNITO_USER_POOL = 'us-east-1_VLYJV2nab'
-# Provide this value if `id_token` is used for authentication (it contains 'aud' claim).
-# `access_token` doesn't have it, in this case keep the COGNITO_AUDIENCE empty
-COGNITO_AUDIENCE = None
-COGNITO_POOL_URL = None  # will be set few lines of code later, if configuration provided
+COGNITO_AUDIENCE = None # Privide if id token is used
+COGNITO_POOL_URL = None
 
 rsa_keys = {}
-# To avoid circular imports, we keep this logic here.
-# On django init we download jwks public keys which are used to validate jwt tokens.
-# For now there is no rotation of keys (seems like in Cognito decided not to implement it)
 if COGNITO_AWS_REGION and COGNITO_USER_POOL:
     COGNITO_POOL_URL = 'https://cognito-idp.{}.amazonaws.com/{}'.format(COGNITO_AWS_REGION, COGNITO_USER_POOL)
     pool_jwks_url = COGNITO_POOL_URL + '/.well-known/jwks.json'

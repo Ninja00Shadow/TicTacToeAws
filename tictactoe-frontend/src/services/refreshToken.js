@@ -3,26 +3,26 @@ import userPool from '../userpool';
 import { useCookies } from 'react-cookie';
 import { useEffect } from "react";
 
-export function getSessionService() {
-    const cognitoUser = userPool.getCurrentUser();
-    return new Promise<CognitoUserSession>((resolve, reject) => {
-      if (!cognitoUser) {
-        reject(new Error("No user found"));
-        return;
-      }
-      cognitoUser.getSession((err, session) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        if (!session) {
-          reject(new Error("No session found"));
-          return;
-        }
-        resolve(session);
-      })
-    })
-  }
+// export function getSessionService() {
+//     const cognitoUser = userPool.getCurrentUser();
+//     return new Promise<CognitoUserSession>((resolve, reject) => {
+//       if (!cognitoUser) {
+//         reject(new Error("No user found"));
+//         return;
+//       }
+//       cognitoUser.getSession((err, session) => {
+//         if (err) {
+//           reject(err);
+//           return;
+//         }
+//         if (!session) {
+//           reject(new Error("No session found"));
+//           return;
+//         }
+//         resolve(session);
+//       })
+//     })
+//   }
   
   export const useRefreshTokenService = (username) => {
     const [cookies, setCookie] = useCookies(['user-token', 'refresh-token']);

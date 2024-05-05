@@ -38,6 +38,7 @@ class IndexView(APIView):
 
 
 class GameView(APIView):
+    permission_classes = (IsAuthenticated,)
     def get(self, request, id=None, name=None):
         try:
             room = Room.objects.get(id=id)
