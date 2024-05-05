@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import userPool from '../userpool';
 
-const backendUrl = !!process.env.REACT_APP_BACKEND_URL ? 'http://${process.env.REACT_APP_API_IP}:8000' : 'http://localhost:8000';
+const backendUrl = !!process.env.REACT_APP_API_IP ? 'http://${process.env.REACT_APP_API_IP}:8000' : 'http://localhost:8000';
 
 const IndexView = () => {
   const navigate = useNavigate();
