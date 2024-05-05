@@ -5,8 +5,7 @@ import { authenticate } from '../services/authenticate';
 import { useCookies } from 'react-cookie';
 
 const Login = () => {
-  const [token, setToken] = useCookies(['user-token']);
-  const [refreshToken, setRefreshToken] = useCookies(['refresh-token']);
+  const [cookies, setCookie] = useCookies(['user-token','username']);
 
   const Navigate = useNavigate();
 
@@ -59,8 +58,8 @@ const Login = () => {
           authenticate(username,password)
           .then((data)=>{
             setLoginErr('');
-            setToken('user-token',data.accessToken.jwtToken,{path:'/', maxAge:3600 * 24 * 30});
-            setRefreshToken('refresh-token',data.refreshToken.token,{path:'/', maxAge:3600 * 24 * 30});
+            setCookie('user-token',data.accessToken.jwtToken,{path:'/', maxAge:3600 * 24 * 30});
+            setCookie('username',username,{path:'/', maxAge:3600 * 24 * 30});
             Navigate('/');
           },(err)=>{
             console.log(err);

@@ -6,15 +6,20 @@ import GameView from './components/GameView';
 import Signup from './components/Signup';
 import Login from './components/Login';
 
+import { useRefreshTokenService } from './services/refreshToken';
+
 import './App.css';
-import userpool from './userpool';
 
 function App() {
   const [token] = useCookies(['user-token']);
+  const [username] = useCookies(['username']);
 
   useEffect(() => {
-    console.log(token['user-token']);
+    console.log("Access token = " + token['user-token']);
+    console.log("Username = " + username['username']);
   }, []);
+
+  useRefreshTokenService(username['username'] || null);
 
   return (
     <CookiesProvider>

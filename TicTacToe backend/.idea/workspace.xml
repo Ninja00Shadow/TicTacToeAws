@@ -5,8 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9b15246d-856d-45a1-a300-68f68bce7014" name="Changes" comment="frontend version">
+      <change beforePath="$PROJECT_DIR$/../.env" beforeDir="false" afterPath="$PROJECT_DIR$/../.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/0f0c9efe-2e4b-4c60-9af8-07489f128165.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/0f0c9efe-2e4b-4c60-9af8-07489f128165.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/8210302f-da51-4a0e-97ba-d11984de00f2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/8210302f-da51-4a0e-97ba-d11984de00f2/storage_v2/_src_/schema/main.uQUzAA.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../docker-compose.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tictactoe-frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-frontend/src/App.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,8 +113,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-PY-241.14494.241" />
-        <option value="bundled-python-sdk-0509580d9d50-28c9f5db9ffe-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.14494.241" />
+        <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-PY-241.15989.155" />
+        <option value="bundled-python-sdk-babbdf50b680-7c6932dee5e4-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.15989.155" />
       </set>
     </attachedChunks>
   </component>
@@ -140,7 +146,9 @@
       <workItem from="1713702872065" duration="1007000" />
       <workItem from="1713703907894" duration="14337000" />
       <workItem from="1713791698713" duration="25000" />
-      <workItem from="1714308249609" duration="8511000" />
+      <workItem from="1714308249609" duration="9635000" />
+      <workItem from="1714396921007" duration="41000" />
+      <workItem from="1714918319223" duration="2007000" />
     </task>
     <task id="LOCAL-00001" summary="init, ws in memory">
       <option name="closed" value="true" />
