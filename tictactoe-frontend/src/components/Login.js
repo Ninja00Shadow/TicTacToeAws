@@ -71,6 +71,10 @@ const Login = () => {
       .catch(err => console.log(err));
   }
 
+  const goTosignup = () => {
+    Navigate('/signup');
+  }
+
   return (
     <div className="login">
 
@@ -97,6 +101,7 @@ const Login = () => {
         </div>
         <Typography variant="body">{loginErr}</Typography>
       </div>
+      <button onClick={goTosignup} className='signupButton'>Signup</button>
 
     </div>
   )

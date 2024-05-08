@@ -27,15 +27,14 @@ resource "aws_cognito_user_pool" "user_pool" {
   }
 }
 
-resource "aws_cognito_user_pool_client" "frontend_client" {
-  name         = "frontend-client"
+resource "aws_cognito_user_pool_client" "client" {
+  name         = "client"
   user_pool_id = aws_cognito_user_pool.user_pool.id
   prevent_user_existence_errors = "ENABLED"
 
   explicit_auth_flows = [
     "ALLOW_REFRESH_TOKEN_AUTH",
     "ALLOW_USER_PASSWORD_AUTH",
-    "ALLOW_ADMIN_USER_PASSWORD_AUTH",
     "ALLOW_USER_SRP_AUTH",
   ]
 

@@ -4,6 +4,8 @@ import axios from '../axiosConfig';
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import userPool from '../userpool';
+import { useEffect } from "react";
+import { useSaveRefreshTokenService, useRefreshTokenService } from '../services/refreshToken';
 
 const backendUrl = !!process.env.REACT_APP_API_IP ? 'http://${process.env.REACT_APP_API_IP}:8000' : 'http://localhost:8000';
 
@@ -13,6 +15,16 @@ const IndexView = () => {
   const [playerName, setPlayerName] = useState('');
 
   const [cookies, setCookie, removeCookie] = useCookies(['user-token', 'username']);
+
+  useEffect(() => {
+    console.log("Access token = " + cookies['user-token']);
+    console.log("Username = " + cookies['username']);
+    console.log("Refresh token = " + cookies['refresh-token']);
+  }, []);
+
+  useSaveRefreshTokenService();
+
+  useRefreshTokenService(cookies['username'] || null);
 
   const logout = () => {
     removeCookie('user-token');
@@ -43,7 +55,8 @@ const IndexView = () => {
       }
 
     } catch (error) {
-      console.error('Error:', error);
+      // console.error('Error:', error);
+      window.location.reload();
     }
   };
 
