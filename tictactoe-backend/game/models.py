@@ -11,11 +11,15 @@ from core.models import AbstractBaseModel
 class Room(models.Model):
     id = models.AutoField(primary_key=True)
     closed = models.BooleanField(default=False, null=False, blank=False)
-    player1 = models.CharField(max_length=100, null=False, blank=False)
-    player2 = models.CharField(max_length=100, null=True, blank=True)
+    player1 = models.ForeignKey('User', on_delete=models.CASCADE, related_name='player1', null=True, blank=True)
+    player2 = models.ForeignKey('User', on_delete=models.CASCADE, related_name='player2', null=True, blank=True)
+    who_won = models.ForeignKey('User', on_delete=models.CASCADE, related_name='who_won', null=True, blank=True)
 
     def get_players(self):
         return [self.player1, self.player2]
+
+    def get_player_names(self):
+        return [self.player1.username, self.player2.username if self.player2 else None]
 
     def __str__(self) -> str:
         return f"{self.id} ({'Closed' if self.closed else 'Open'}) - {self.player1} vs {self.player2 if self.player2 else 'Waiting...'}"
@@ -25,6 +29,7 @@ class User(PermissionsMixin, AbstractBaseUser, AbstractBaseModel):
     username_validator = UnicodeUsernameValidator()
 
     username = models.CharField('Username', max_length=255, unique=True, validators=[username_validator])
+    # cognito_sub = models.UUIDField('Cognito Sub', default=uuid.uuid4, unique=True)
     is_active = models.BooleanField('Active', default=True)
 
     email = models.EmailField('Email address', blank=True)
@@ -33,6 +38,8 @@ class User(PermissionsMixin, AbstractBaseUser, AbstractBaseModel):
         default=False,
         help_text='Designates whether the user can log into this admin site.'
     )
+
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
 
     objects = UserManager()
 
@@ -43,3 +50,9 @@ class User(PermissionsMixin, AbstractBaseUser, AbstractBaseModel):
     @property
     def is_django_user(self):
         return self.has_usable_password()
+
+    def __str__(self) -> str:
+        return self.username
+
+    def __repr__(self) -> str:
+        return self.username

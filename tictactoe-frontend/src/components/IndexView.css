@@ -12,7 +12,6 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background: linear-gradient(166.66deg, rgb(31, 117, 206) 4.62%, rgb(23, 121, 207) 4.62%, rgb(116, 75, 196) 86.29%);
 }
 
 .wrapper .form {

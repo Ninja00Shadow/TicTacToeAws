@@ -7,24 +7,20 @@ import userPool from '../userpool';
 import { useEffect } from "react";
 import { useSaveRefreshTokenService, useRefreshTokenService } from '../services/refreshToken';
 
-const backendUrl = !!process.env.REACT_APP_API_IP ? 'http://${process.env.REACT_APP_API_IP}:8000' : 'http://localhost:8000';
-
 const IndexView = () => {
   const navigate = useNavigate();
 
-  const [playerName, setPlayerName] = useState('');
-
   const [cookies, setCookie, removeCookie] = useCookies(['user-token', 'username']);
 
-  useEffect(() => {
-    console.log("Access token = " + cookies['user-token']);
-    console.log("Username = " + cookies['username']);
-    console.log("Refresh token = " + cookies['refresh-token']);
-  }, []);
+  // useEffect(() => {
+  //   console.log("Access token = " + cookies['user-token']);
+  //   console.log("Username = " + cookies['username']);
+  //   console.log("Refresh token = " + cookies['refresh-token']);
+  // }, []);
 
-  useSaveRefreshTokenService();
+  // useSaveRefreshTokenService();
 
-  useRefreshTokenService(cookies['username'] || null);
+  // useRefreshTokenService(cookies['username'] || null);
 
   const logout = () => {
     removeCookie('user-token');
@@ -39,41 +35,26 @@ const IndexView = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (playerName.trim() === '') {
-      alert('Please enter a valid name.');
-      return;
-    }
 
     try {
       const response = await axios.post('', {
-        'player-name': playerName
+        'player-name': cookies['username'],
       });
       console.log(response);
 
       if (response.status === 200) {
-        window.location.href = `/game/${response.data.id}/${playerName}`;
+        window.location.href = `/game/${response.data.id}/${cookies['username']}`;
       }
 
     } catch (error) {
-      // console.error('Error:', error);
-      window.location.reload();
+      console.error('Error:', error);
     }
-  };
-
-  const handleChange = (e) => {
-    setPlayerName(e.target.value);
   };
 
   return (
     <div className="wrapper">
       <button onClick={logout} className='logoutButton'>Logout</button>
       <form className="form" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={playerName}
-          onChange={handleChange}
-          placeholder="Enter Your Name"
-        />
         <button type="submit">Play</button>
       </form>
     </div>

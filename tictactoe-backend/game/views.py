@@ -1,3 +1,4 @@
+from django.core.files.storage import default_storage
 from django.shortcuts import render, HttpResponse, redirect
 from rest_framework import status
 
@@ -8,7 +9,7 @@ from rest_framework.response import Response
 
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import RetrieveModelMixin
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from game.serializers import UserSerializer
 
@@ -27,10 +28,12 @@ class IndexView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": "Please enter a valid name."})
 
         if len(Room.objects.filter(closed__exact=False)) <= 0:
-            room = Room.objects.create(player1=playerName)
+            user = User.objects.get(username=playerName)
+            room = Room.objects.create(player1=user)
         else:
             room = Room.objects.filter(closed__exact=False).first()
-            room.player2 = playerName
+            user = User.objects.get(username=playerName)
+            room.player2 = user
             room.closed = True
             room.save()
 
@@ -39,6 +42,7 @@ class IndexView(APIView):
 
 class GameView(APIView):
     permission_classes = (IsAuthenticated,)
+
     def get(self, request, id=None, name=None):
         try:
             room = Room.objects.get(id=id)
@@ -104,3 +108,28 @@ class UserProfileAPIView(RetrieveModelMixin, GenericAPIView):
         Get profile of current logged in user.
         """
         return self.retrieve(request, *args, **kwargs)
+
+
+class SignupUser(APIView):
+    def post(self, request, *args, **kwargs):
+        print(request.data)
+
+        file = request.FILES.get('avatar')
+        username = request.data.get('username')
+        email = request.data.get('email')
+
+        user = User.objects.create(username=username, email=email, avatar=file)
+
+        return Response(status=status.HTTP_201_CREATED)
+
+
+class GetAvatar(APIView):
+    permission_classes = (AllowAny,)
+    authentication_classes = []
+
+    def get(self, request, username=None):
+        print(username)
+        print(User.objects.all())
+        user = User.objects.get(username=username)
+        avatar = user.avatar
+        return HttpResponse(avatar, content_type='image/png')

@@ -91,8 +91,8 @@ export const useRefreshTokenService = (username) => {
                 console.log("Session refreshed: ", session);
                 if (session.isValid() && cookies['user-token'] != session.getAccessToken().getJwtToken()) {
                     setCookie('user-token', session.getAccessToken().getJwtToken(), { path: '/', maxAge: 3600 * 24 * 30 });
-                    console.log("Token has been successfully refreshed!");
-                    console.log("New Access Token: ", cookies['user-token']);
+                    // console.log("Token has been successfully refreshed!");
+                    // console.log("New Access Token: ", cookies['user-token']);
                     setLastRefresh(Date.now());
                     // window.location.reload(); // Added now
                 }

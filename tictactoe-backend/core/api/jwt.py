@@ -9,7 +9,11 @@ from django.contrib.auth import authenticate
 
 def get_username_from_payload_handler(payload):
     username = payload.get('username')
-    authenticate(remote_user=username)
+    new_user = authenticate(remote_user=username)
+
+    # print(new_user.username)
+    # print(new_user.uuid)
+
     return username
 
 

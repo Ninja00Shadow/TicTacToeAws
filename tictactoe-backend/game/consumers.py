@@ -46,7 +46,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
                             "event": "game_start",
                             "board": self.board,
                             "my_turn": True if i == 0 else False,
-                            "players": players
+                            "players": [player.username for player in players]
                         }
                     }
                 )
