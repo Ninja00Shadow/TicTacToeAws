@@ -128,8 +128,30 @@ class GetAvatar(APIView):
     authentication_classes = []
 
     def get(self, request, username=None):
-        print(username)
-        print(User.objects.all())
-        user = User.objects.get(username=username)
-        avatar = user.avatar
-        return HttpResponse(avatar, content_type='image/png')
+        try:
+            user = User.objects.get(username=username)
+            if user.avatar:
+                return HttpResponse(user.avatar, content_type='image/png')
+            else:
+                return HttpResponse("No avatar available", status=404)
+        except User.DoesNotExist:
+            return HttpResponse("User not found", status=404)
+
+
+class GetMatches(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, username=None):
+        try:
+            user = User.objects.get(username=username)
+            rooms = Room.objects.filter(player1=user) | Room.objects.filter(player2=user)
+
+            matches = []
+            for room in rooms:
+                opponent = room.player2.username if room.player1 == user else room.player1.username
+                outcome = room.who_won
+                matches.append({"opponent": opponent, "outcome": outcome})
+
+            return Response(data={"matches": matches}, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)

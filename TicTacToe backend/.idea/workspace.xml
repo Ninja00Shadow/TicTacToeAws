@@ -6,16 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="9b15246d-856d-45a1-a300-68f68bce7014" name="Changes" comment="frontend version">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tictactoe-backend/core/api/jwt.py" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/core/api/jwt.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tictactoe-backend/game/consumers.py" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/game/consumers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tictactoe-backend/game/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tictactoe-backend/game/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/game/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tictactoe-backend/game/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/game/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../tictactoe-backend/game/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/game/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tictactoe-frontend/src/components/GameView.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-frontend/src/components/GameView.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tictactoe-frontend/src/components/IndexView.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-frontend/src/components/IndexView.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tictactoe-frontend/src/components/Signup.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-frontend/src/components/Signup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tictactoe-frontend/src/services/refreshToken.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-frontend/src/services/refreshToken.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tictactoe-backend/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -160,6 +152,9 @@
       <workItem from="1715280511390" duration="84000" />
       <workItem from="1715431213333" duration="9781000" />
       <workItem from="1715460572048" duration="3107000" />
+      <workItem from="1715525233778" duration="1860000" />
+      <workItem from="1715534836178" duration="1229000" />
+      <workItem from="1715612393461" duration="157000" />
     </task>
     <task id="LOCAL-00001" summary="init, ws in memory">
       <option name="closed" value="true" />
