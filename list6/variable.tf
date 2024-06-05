@@ -32,8 +32,3 @@ variable "email" {
   description = "The email address to notify"
   type        = string
 }
-
-variable "lb_name" {
-  description = "The name of the load balancer"
-  type        = string
-}
