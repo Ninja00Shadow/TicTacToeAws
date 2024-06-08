@@ -125,7 +125,7 @@ class SignupUser(APIView):
         s3_client = client('s3', region_name='us-east-1')
 
         if file:
-            s3_client.upload_fileobj(file, 'tictactoe-avatars-317a48444b7c2a5b', f"avatars/{username}")
+            s3_client.upload_fileobj(file, 'tictactoe-avatars-317a48444b7c2a5b', f"avatars/{username}.png")
 
         return Response(status=status.HTTP_201_CREATED)
 
@@ -139,7 +139,7 @@ class GetAvatar(APIView):
             user = User.objects.get(username=username)
 
             s3_client = client('s3', region_name='us-east-1')
-            response = s3_client.get_object(Bucket='tictactoe-avatars-317a48444b7c2a5b', Key=f"avatars/{username}")
+            response = s3_client.get_object(Bucket='tictactoe-avatars-317a48444b7c2a5b', Key=f"avatars/{username}.png")
 
             if response:
                 return HttpResponse(response, content_type='image/png')
