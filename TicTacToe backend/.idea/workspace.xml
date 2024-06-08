@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9b15246d-856d-45a1-a300-68f68bce7014" name="Changes" comment="frontend version">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tictactoe-backend/game/consumers.py" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/game/consumers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tictactoe-frontend/src/components/AvatarDisplay.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-frontend/src/components/AvatarDisplay.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tictactoe-frontend/src/components/GameView.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-frontend/src/components/GameView.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tictactoe-frontend/src/components/Signup.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-frontend/src/components/Signup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tictactoe-backend/TicTacToe/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/TicTacToe/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -158,7 +154,7 @@
       <workItem from="1715525233778" duration="1860000" />
       <workItem from="1715534836178" duration="1229000" />
       <workItem from="1715612393461" duration="157000" />
-      <workItem from="1717853982952" duration="1256000" />
+      <workItem from="1717853982952" duration="3143000" />
     </task>
     <task id="LOCAL-00001" summary="init, ws in memory">
       <option name="closed" value="true" />
