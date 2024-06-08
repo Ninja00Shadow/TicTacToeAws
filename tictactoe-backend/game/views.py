@@ -13,6 +13,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from game.serializers import UserSerializer
 
+from boto3 import client
+
 
 class IndexView(APIView):
     permission_classes = (IsAuthenticated,)
@@ -118,7 +120,12 @@ class SignupUser(APIView):
         username = request.data.get('username')
         email = request.data.get('email')
 
-        user = User.objects.create(username=username, email=email, avatar=file)
+        user = User.objects.create(username=username, email=email)
+
+        s3_client = client('s3', region_name='us-east-1')
+
+        if file:
+            s3_client.upload_fileobj(file, 'tictactoe-avatars-317a48444b7c2a5b', f"avatars/{username}")
 
         return Response(status=status.HTTP_201_CREATED)
 
@@ -130,8 +137,12 @@ class GetAvatar(APIView):
     def get(self, request, username=None):
         try:
             user = User.objects.get(username=username)
-            if user.avatar:
-                return HttpResponse(user.avatar, content_type='image/png')
+
+            s3_client = client('s3', region_name='us-east-1')
+            response = s3_client.get_object(Bucket='tictactoe-avatars-317a48444b7c2a5b', Key=f"avatars/{username}")
+
+            if response:
+                return HttpResponse(response, content_type='image/png')
             else:
                 return HttpResponse("No avatar available", status=404)
         except User.DoesNotExist:
