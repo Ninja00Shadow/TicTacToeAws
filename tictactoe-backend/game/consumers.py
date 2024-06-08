@@ -3,7 +3,7 @@ import random
 
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from game.helpers import *
-from game.models import Room
+from game.models import Room, User
 from asgiref.sync import sync_to_async
 
 
@@ -68,9 +68,15 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     async def receive_json(self, content, **kwargs):
         if content["event"] == "boardData_send":
+            player = content["player"]
 
             winner = check_winner(content["board"])
             if winner:
+                room = await sync_to_async(Room.objects.get, thread_sensitive=True)(id=self.room_id)
+                user = await sync_to_async(User.objects.get, thread_sensitive=True)(username=player)
+                room.who_won = user
+                await sync_to_async(room.save, thread_sensitive=True)()
+
                 return await self.channel_layer.group_send(
                     self.group_name,
                     {

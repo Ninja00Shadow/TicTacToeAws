@@ -7,7 +7,7 @@ const AvatarDisplay = ({ username }) => {
     useEffect(() => {
         const fetchAvatar = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/avatar/${username}`, {
+                const response = await axios.get(`http://44.205.169.11:8000/avatar/${username}`, {
                     responseType: 'blob'
                 });
                 const imageBlob = response.data;

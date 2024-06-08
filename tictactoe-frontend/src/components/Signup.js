@@ -40,30 +40,30 @@ const Signup = () => {
                 setEmailErr("Email is Required");
                 setPasswordErr("Password is required")
                 setImageError("Image is required")
-                resolve({ username: "Username is Required", email: "Email is Required", password: "Password is required", image: "Image is required"});
+                resolve({ username: "Username is Required", email: "Email is Required", password: "Password is required", image: "Image is required" });
             }
             else if (username === '') {
                 setUsernameErr("Username is Required")
-                resolve({ username: "Username is Required", email: "", password: "", image: ""});
+                resolve({ username: "Username is Required", email: "", password: "", image: "" });
             }
             else if (email === '') {
                 setEmailErr("Email is Required")
-                resolve({ username: "", email: "Email is Required", password: "", image: ""});
+                resolve({ username: "", email: "Email is Required", password: "", image: "" });
             }
             else if (password === '') {
                 setPasswordErr("Password is required")
-                resolve({ username: "", email: "", password: "Password is required", image: ""});
+                resolve({ username: "", email: "", password: "Password is required", image: "" });
             }
             else if (password.length < 6) {
                 setPasswordErr("must be 6 character")
-                resolve({ username: "", email: "", password: "must be 6 character", image: ""});
+                resolve({ username: "", email: "", password: "must be 6 character", image: "" });
             }
             else if (selectedImage === null) {
                 setImageError("Image is required")
                 resolve({ username: "", email: "", password: "", image: "Image is required" });
             }
             else {
-                resolve({ username: "", email: "", password: "", image: ""});
+                resolve({ username: "", email: "", password: "", image: "" });
             }
             reject('')
         });
@@ -116,12 +116,21 @@ const Signup = () => {
                     formData.append('username', username);
                     formData.append('email', email);
 
-                    axios.post('http://localhost:8000/signup', formData, {
+                    axios.post('http://44.205.169.11:8000/signup', formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
                     }).then(res => {
                         console.log(res);
+                        userpool.signUp(username, password, attributeList, null, (err, data) => {
+                            if (err) {
+                                console.log(err);
+                                alert("Couldn't sign up");
+                            } else {
+                                console.log(data);
+                                alert('User Added Successfully');
+                            }
+                        });
                     }).catch(error => {
                         console.error('Error uploading data:', error);
                     });
@@ -137,11 +146,11 @@ const Signup = () => {
                 <h1>Upload your avatar</h1>
 
                 {selectedImage && (
-                        <img
-                            alt='not found'
-                            width={"250px"}
-                            src={URL.createObjectURL(selectedImage)}
-                        />   
+                    <img
+                        alt='not found'
+                        width={"250px"}
+                        src={URL.createObjectURL(selectedImage)}
+                    />
                 )}
 
                 <br />
