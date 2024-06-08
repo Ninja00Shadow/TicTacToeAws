@@ -166,3 +166,18 @@ class GetMatches(APIView):
             return Response(data={"matches": matches}, status=status.HTTP_200_OK)
         except User.DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class GetAllMatches(APIView):
+    permission_classes = (AllowAny,)
+    authentication_classes = []
+
+    def get(self, request):
+        rooms = Room.objects.all()
+
+        matches = []
+        for room in rooms:
+            if room.player2 is not None and room.who_won is not None:
+                matches.append({"player1": room.player1.username, "player2": room.player2.username, "winner": room.who_won.username})
+
+        return Response(data={"matches": matches}, status=status.HTTP_200_OK)

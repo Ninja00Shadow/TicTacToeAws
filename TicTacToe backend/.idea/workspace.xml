@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="9b15246d-856d-45a1-a300-68f68bce7014" name="Changes" comment="frontend version">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tictactoe-backend/TicTacToe/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/TicTacToe/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tictactoe-backend/game/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/game/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../tictactoe-backend/game/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/../tictactoe-backend/game/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -156,7 +156,7 @@
       <workItem from="1715534836178" duration="1229000" />
       <workItem from="1715612393461" duration="157000" />
       <workItem from="1717853982952" duration="4406000" />
-      <workItem from="1717869967784" duration="4775000" />
+      <workItem from="1717869967784" duration="5832000" />
     </task>
     <task id="LOCAL-00001" summary="init, ws in memory">
       <option name="closed" value="true" />
