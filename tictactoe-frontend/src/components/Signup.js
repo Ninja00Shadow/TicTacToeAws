@@ -86,53 +86,32 @@ const Signup = () => {
                             Value: email,
                         })
                     );
-                    // userpool.signUp(username, password, attributeList, null, (err, data) => {
-                    //     if (err) {
-                    //         console.log(err);
-                    //         alert("Couldn't sign up");
-                    //     } else {
-                    //         console.log(data);
-                    //         alert('User Added Successfully');
-
-                    //         let formData = new FormData();
-                    //         formData.append('file', selectedImage);
-                    //         axios.post('/upload', formData, {
-                    //             headers: {
-                    //                 'Content-Type': 'multipart/form-data'
-                    //             }
-                    //         }).then(res => {
-                    //             console.log(res);
-                    //             if (res.status === 200) {
-                    //                 axios.post('/v1/signupdata', { username: username, email: email, avatar: res.data.data.Location })
-                    //                 Navigate('/');
-                    //             }})
-
-                    //         // Navigate('/');
-                    //     }
-                    // });
 
                     let formData = new FormData();
                     formData.append('avatar', selectedImage);
                     formData.append('username', username);
                     formData.append('email', email);
 
-                    axios.post('http://44.205.169.11:8000/signup', formData, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
+                    userpool.signUp(username, password, attributeList, null, (err, data) => {
+                        if (err) {
+                            console.log(err);
+                            alert("Couldn't sign up");
+                        } else {
+                            console.log(data);
+
+                            axios.post('http://44.205.169.11:8000/signup', formData, {
+                                headers: {
+                                    'Content-Type': 'multipart/form-data'
+                                }
+                            }).then(res => {
+                                console.log(res);
+                            }).catch(error => {
+                                console.error('Error uploading data:', error);
+                            });
+
+                            alert('User Added Successfully');
+                            Navigate('/');
                         }
-                    }).then(res => {
-                        console.log(res);
-                        userpool.signUp(username, password, attributeList, null, (err, data) => {
-                            if (err) {
-                                console.log(err);
-                                alert("Couldn't sign up");
-                            } else {
-                                console.log(data);
-                                alert('User Added Successfully');
-                            }
-                        });
-                    }).catch(error => {
-                        console.error('Error uploading data:', error);
                     });
                 }
             }, err => console.log(err))

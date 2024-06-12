@@ -97,19 +97,19 @@ class GameView(APIView):
 #         return render(request, "game.html", {"room": room, "name": name})
 
 
-class UserProfileAPIView(RetrieveModelMixin, GenericAPIView):
-    serializer_class = UserSerializer
-    permission_classes = (IsAuthenticated,)
-
-    def get_object(self):
-        return self.request.user
-
-    def get(self, request, *args, **kwargs):
-        """
-        User profile
-        Get profile of current logged in user.
-        """
-        return self.retrieve(request, *args, **kwargs)
+# class UserProfileAPIView(RetrieveModelMixin, GenericAPIView):
+#     serializer_class = UserSerializer
+#     permission_classes = (IsAuthenticated,)
+#
+#     def get_object(self):
+#         return self.request.user
+#
+#     def get(self, request, *args, **kwargs):
+#         """
+#         User profile
+#         Get profile of current logged in user.
+#         """
+#         return self.retrieve(request, *args, **kwargs)
 
 
 class SignupUser(APIView):
@@ -130,42 +130,23 @@ class SignupUser(APIView):
         return Response(status=status.HTTP_201_CREATED)
 
 
-class GetAvatar(APIView):
-    permission_classes = (AllowAny,)
-    authentication_classes = []
-
-    def get(self, request, username=None):
-        try:
-            user = User.objects.get(username=username)
-
-            s3_client = client('s3', region_name='us-east-1')
-            response = s3_client.get_object(Bucket='tictactoe-avatars-317a48444b7c2a5b', Key=f"avatars/{username}.png")
-
-            if response:
-                return HttpResponse(response, content_type='image/png')
-            else:
-                return HttpResponse("No avatar available", status=404)
-        except User.DoesNotExist:
-            return HttpResponse("User not found", status=404)
-
-
-class GetMatches(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request, username=None):
-        try:
-            user = User.objects.get(username=username)
-            rooms = Room.objects.filter(player1=user) | Room.objects.filter(player2=user)
-
-            matches = []
-            for room in rooms:
-                opponent = room.player2.username if room.player1 == user else room.player1.username
-                outcome = room.who_won
-                matches.append({"opponent": opponent, "outcome": outcome})
-
-            return Response(data={"matches": matches}, status=status.HTTP_200_OK)
-        except User.DoesNotExist:
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+# class GetAvatar(APIView):
+#     permission_classes = (AllowAny,)
+#     authentication_classes = []
+#
+#     def get(self, request, username=None):
+#         try:
+#             user = User.objects.get(username=username)
+#
+#             s3_client = client('s3', region_name='us-east-1')
+#             response = s3_client.get_object(Bucket='tictactoe-avatars-317a48444b7c2a5b', Key=f"avatars/{username}.png")
+#
+#             if response:
+#                 return HttpResponse(response, content_type='image/png')
+#             else:
+#                 return HttpResponse("No avatar available", status=404)
+#         except User.DoesNotExist:
+#             return HttpResponse("User not found", status=404)
 
 
 class GetAllMatches(APIView):
@@ -177,7 +158,7 @@ class GetAllMatches(APIView):
 
         matches = []
         for room in rooms:
-            if room.player2 is not None and room.who_won is not None:
-                matches.append({"player1": room.player1.username, "player2": room.player2.username, "winner": room.who_won.username})
+            if room.player2 is not None:
+                matches.append({"player1": room.player1.username, "player2": room.player2.username, "winner": room.who_won.username if room.who_won else None})
 
         return Response(data={"matches": matches}, status=status.HTTP_200_OK)
