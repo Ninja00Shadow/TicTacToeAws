@@ -10,9 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-from pathlib import Path
-
 import json
+import os
+import secrets
+from pathlib import Path
 from urllib import request
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -21,13 +22,25 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-spj3#*@ox)4kfp_!4u3h=ws-d(v3#m-wjhi19n89o#xrl4c12a'
+def env_bool(name, default=False):
+    return os.environ.get(name, str(default)).lower() in ('1', 'true', 'yes', 'on')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+def env_list(name, default=''):
+    return [value.strip() for value in os.environ.get(name, default).split(',') if value.strip()]
+
+
+LOCAL_DEV = env_bool('LOCAL_DEV', False)
+AUTH_MODE = os.environ.get('AUTH_MODE', 'local' if LOCAL_DEV else 'cognito').lower()
+DEBUG = env_bool('DJANGO_DEBUG', LOCAL_DEV)
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+
+if not SECRET_KEY:
+    if not LOCAL_DEV:
+        raise RuntimeError('DJANGO_SECRET_KEY must be set outside explicit local development mode.')
+    SECRET_KEY = secrets.token_urlsafe(50)
+
+ALLOWED_HOSTS = env_list('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1')
 
 # Application definition
 
@@ -64,12 +77,15 @@ AUTHENTICATION_BACKENDS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny'],
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-    ),
 }
 
-CORS_ORIGIN_ALLOW_ALL = True
+if AUTH_MODE == 'cognito':
+    REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] = (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    )
+
+CORS_ALLOWED_ORIGINS = env_list('CORS_ALLOWED_ORIGINS', 'http://localhost:3000,http://localhost')
+CORS_ORIGIN_ALLOW_ALL = DEBUG and not CORS_ALLOWED_ORIGINS
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -98,16 +114,24 @@ ASGI_APPLICATION = 'TicTacToe.asgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'tictactoe_db',
-        'USER': 'tttadmin',
-        'PASSWORD': 'strongpassword123',
-        'HOST': 'terraform-20240608121412138400000001.ck51chqzqwzi.us-east-1.rds.amazonaws.com',
-        'PORT': '5432',
+if os.environ.get('DB_ENGINE') == 'postgresql':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('DB_NAME', ''),
+            'USER': os.environ.get('DB_USER', ''),
+            'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+            'HOST': os.environ.get('DB_HOST', ''),
+            'PORT': os.environ.get('DB_PORT', '5432'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 CHANNEL_LAYERS = {
     "default": {
@@ -148,6 +172,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -156,13 +181,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'game.User'
 
-COGNITO_AWS_REGION = 'us-east-1'
-COGNITO_USER_POOL = 'us-east-1_VLYJV2nab'
-COGNITO_AUDIENCE = None # Privide if id token is used
+AWS_REGION = os.environ.get('AWS_REGION', 'us-east-1')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+
+COGNITO_AWS_REGION = os.environ.get('COGNITO_AWS_REGION')
+COGNITO_USER_POOL = os.environ.get('COGNITO_USER_POOL')
+COGNITO_AUDIENCE = os.environ.get('COGNITO_AUDIENCE') or None
 COGNITO_POOL_URL = None
 
 rsa_keys = {}
-if COGNITO_AWS_REGION and COGNITO_USER_POOL:
+if AUTH_MODE == 'cognito' and COGNITO_AWS_REGION and COGNITO_USER_POOL:
     COGNITO_POOL_URL = 'https://cognito-idp.{}.amazonaws.com/{}'.format(COGNITO_AWS_REGION, COGNITO_USER_POOL)
     pool_jwks_url = COGNITO_POOL_URL + '/.well-known/jwks.json'
     jwks = json.loads(request.urlopen(pool_jwks_url).read())

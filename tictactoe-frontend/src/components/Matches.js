@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from '../axiosConfig';
 import './Matches.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,7 +12,7 @@ const Matches = () => {
   useEffect(() => {
     const fetchMatches = async () => {
       try {
-        const response = await axios.get('http://44.205.169.11:8000/matches');
+        const response = await axios.get('/matches');
         setMatches(response.data.matches);
       } catch (error) {
         setError('Error fetching matches');

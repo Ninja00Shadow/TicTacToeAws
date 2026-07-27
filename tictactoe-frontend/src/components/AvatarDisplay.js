@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { API_URL, AUTH_MODE } from '../config';
+
+const AVATAR_BASE_URL = process.env.REACT_APP_AVATAR_BASE_URL;
 
 const AvatarDisplay = ({ username }) => {
     const [avatarSrc, setAvatarSrc] = useState('');
@@ -7,8 +9,11 @@ const AvatarDisplay = ({ username }) => {
     useEffect(() => {
         const fetchAvatar = async () => {
             try {
-                const imageObjectURL = `https://tictactoe-avatars-317a48444b7c2a5b.s3.amazonaws.com/avatars/${username}.png`;
-                setAvatarSrc(imageObjectURL);
+                if (AUTH_MODE === 'cognito') {
+                    setAvatarSrc(AVATAR_BASE_URL ? `${AVATAR_BASE_URL}/avatars/${username}.png` : '');
+                } else {
+                    setAvatarSrc(`${API_URL}/avatar/${username}`);
+                }
             } catch (error) {
                 console.error('Error fetching avatar:', error);
             }

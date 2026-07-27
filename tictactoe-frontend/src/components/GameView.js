@@ -4,13 +4,14 @@ import axios from '../axiosConfig';
 
 import { useParams } from 'react-router-dom';
 import AvatarDisplay from './AvatarDisplay';
+import { WS_URL } from '../config';
 
 
 // const GameView = ({ roomID, playerName }) => {
 const GameView = () => {
   const { roomID, playerName } = useParams();
   console.log(roomID, playerName)
-  const ws_url = !!process.env.REACT_APP_API_IP ? `ws://${process.env.REACT_APP_API_IP}:8000/ws/game/${roomID}/` : `ws://44.205.169.11:8000/ws/game/${roomID}/`;
+  const ws_url = `${WS_URL}/ws/game/${roomID}/`;
   const ws = new WebSocket(ws_url);
 
   const [opponentName, setOpponentName] = useState('')

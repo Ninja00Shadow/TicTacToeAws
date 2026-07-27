@@ -1,4 +1,3 @@
-import uuid
 from django.db import models
 
 from django.contrib.auth.base_user import AbstractBaseUser
@@ -29,7 +28,6 @@ class User(PermissionsMixin, AbstractBaseUser, AbstractBaseModel):
     username_validator = UnicodeUsernameValidator()
 
     username = models.CharField('Username', max_length=255, unique=True, validators=[username_validator])
-    # cognito_sub = models.UUIDField('Cognito Sub', default=uuid.uuid4, unique=True)
     is_active = models.BooleanField('Active', default=True)
 
     email = models.EmailField('Email address', blank=True)

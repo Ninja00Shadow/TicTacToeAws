@@ -1,9 +1,11 @@
-FROM node:17-alpine as build
-ARG BACKEND_IP
+FROM node:18-alpine AS build
+ARG REACT_APP_API_URL=http://localhost:8000
+ARG REACT_APP_WS_URL=ws://localhost:8000
+ARG REACT_APP_AUTH_MODE=local
 WORKDIR /frontend
 COPY . .
 RUN npm install -fetch-timeout=240000
-RUN REACT_APP_API_IP=${BACKEND_IP} npm run build
+RUN REACT_APP_API_URL=${REACT_APP_API_URL} REACT_APP_WS_URL=${REACT_APP_WS_URL} REACT_APP_AUTH_MODE=${REACT_APP_AUTH_MODE} npm run build
 
 # CMD ["npm", "start"]
 

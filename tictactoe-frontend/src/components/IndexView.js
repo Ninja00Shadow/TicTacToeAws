@@ -6,6 +6,7 @@ import { useCookies } from 'react-cookie';
 import userPool from '../userpool';
 import { useEffect } from "react";
 import { useSaveRefreshTokenService, useRefreshTokenService } from '../services/refreshToken';
+import { AUTH_MODE } from '../config';
 
 const IndexView = () => {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ const IndexView = () => {
     removeCookie('user-token');
     removeCookie('username');
 
-    const cognitoUser = userPool.getCurrentUser();
+    const cognitoUser = AUTH_MODE === 'cognito' ? userPool.getCurrentUser() : null;
     if (cognitoUser) {
       cognitoUser.signOut();
     }

@@ -3,6 +3,8 @@ import { Button, TextField,Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom';
 import { authenticate } from '../services/authenticate';
 import { useCookies } from 'react-cookie';
+import axios from '../axiosConfig';
+import { AUTH_MODE } from '../config';
 
 const Login = () => {
   const [cookies, setCookie] = useCookies(['user-token','username']);
@@ -55,7 +57,11 @@ const Login = () => {
     validation()
       .then((res) => {
         if (res.username === '' && res.password === '') {
-          authenticate(username,password)
+          const login = AUTH_MODE === 'cognito'
+            ? authenticate(username, password)
+            : axios.post('/login', { username, password }).then(response => response.data);
+
+          login
           .then((data)=>{
             setLoginErr('');
             setCookie('user-token',data.accessToken.jwtToken,{path:'/', maxAge:3600 * 24 * 30});

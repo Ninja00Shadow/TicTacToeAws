@@ -2,7 +2,8 @@ import { Button, TextField } from '@mui/material'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CognitoUserAttribute } from 'amazon-cognito-identity-js';
-import axios from 'axios';
+import axios from '../axiosConfig';
+import { AUTH_MODE } from '../config';
 
 
 import userpool from '../userpool';
@@ -17,6 +18,7 @@ const Signup = () => {
     const [usernameErr, setUsernameErr] = useState('');
     const [emailErr, setEmailErr] = useState('');
     const [passwordErr, setPasswordErr] = useState('');
+    const [signupErr, setSignupErr] = useState('');
 
     const [selectedImage, setSelectedImage] = useState(null);
     const [imageError, setImageError] = useState('');
@@ -54,9 +56,9 @@ const Signup = () => {
                 setPasswordErr("Password is required")
                 resolve({ username: "", email: "", password: "Password is required", image: "" });
             }
-            else if (password.length < 6) {
-                setPasswordErr("must be 6 character")
-                resolve({ username: "", email: "", password: "must be 6 character", image: "" });
+            else if (password.length < 8) {
+                setPasswordErr("Password must contain at least 8 characters")
+                resolve({ username: "", email: "", password: "Password must contain at least 8 characters", image: "" });
             }
             else if (selectedImage === null) {
                 setImageError("Image is required")
@@ -73,24 +75,42 @@ const Signup = () => {
         setUsernameErr("");
         setEmailErr("");
         setPasswordErr("");
+        setImageError("");
+        setSignupErr("");
         validation()
             .then((res) => {
                 console.log(res);
                 if (res.username === '' && res.email === '' && res.password === '' && res.image === '') {
                     console.log('clicked');
-                    const attributeList = [];
-
-                    attributeList.push(
-                        new CognitoUserAttribute({
-                            Name: 'email',
-                            Value: email,
-                        })
-                    );
-
                     let formData = new FormData();
                     formData.append('avatar', selectedImage);
                     formData.append('username', username);
                     formData.append('email', email);
+
+                    if (AUTH_MODE !== 'cognito') {
+                        formData.append('password', password);
+                        axios.post('/signup', formData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        }).then(() => {
+                            alert('User Added Successfully');
+                            Navigate('/login');
+                        }).catch(error => {
+                            console.error('Error uploading data:', error);
+                            const responseError = error.response?.data?.error;
+                            const message = Array.isArray(responseError) ? responseError.join(' ') : responseError;
+                            setSignupErr(message || "Couldn't sign up");
+                        });
+                        return;
+                    }
+
+                    const attributeList = [
+                        new CognitoUserAttribute({
+                            Name: 'email',
+                            Value: email,
+                        })
+                    ];
 
                     userpool.signUp(username, password, attributeList, null, (err, data) => {
                         if (err) {
@@ -99,7 +119,7 @@ const Signup = () => {
                         } else {
                             console.log(data);
 
-                            axios.post('http://44.205.169.11:8000/signup', formData, {
+                            axios.post('/signup', formData, {
                                 headers: {
                                     'Content-Type': 'multipart/form-data'
                                 }
@@ -107,6 +127,9 @@ const Signup = () => {
                                 console.log(res);
                             }).catch(error => {
                                 console.error('Error uploading data:', error);
+                                const responseError = error.response?.data?.error;
+                                const message = Array.isArray(responseError) ? responseError.join(' ') : responseError;
+                                setSignupErr(message || "Couldn't create user profile");
                             });
 
                             alert('User Added Successfully');
@@ -175,6 +198,7 @@ const Signup = () => {
                 <div className='formfield'>
                     <Button type='submit' variant='contained' onClick={handleClick}>Signup</Button>
                 </div>
+                {signupErr && <div style={{ color: 'red' }}>{signupErr}</div>}
             </div>
 
         </div>

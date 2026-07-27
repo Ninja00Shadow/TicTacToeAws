@@ -1,16 +1,34 @@
 # Tic Tac Toe web app
 
-This is a simple Tic Tac Toe web application built with django and React. The application allows two players to play the game against each other. It has a dockerized backend and frontend, making it easy to deploy and run in different environments.
+This is a simple Tic Tac Toe web application built with Django and React. The application allows two players to play the game against each other. It has a dockerized backend and frontend, making it easy to deploy and run in different environments.
 
-Because the application was built for a university course, code is disorganized and not well-structured. Some parts build in the beggining may not work. The goal of this project is to demonstrate the use of AWS and Terraform.
+Because the application was built for a university course, some infrastructure code is intentionally left in the repository. The local development mode runs without AWS, Cognito, S3 or RDS access.
 
 ## Features
+
 - Real-time multiplayer game
 - Multiple ways to deploy the application (EC2, Elastic Beanstalk, Fargate)
 - Dockerized backend and frontend with docker-compose for local development
-- User authentication using Cognito
-- Player avatars using S3
+- Local username/password authentication for development
+- AWS deployment configuration using Cognito for authentication and S3 for avatar storage
 - Monitoring and logging using CloudWatch
+
+## Local development
+
+Copy `.env.example` to `.env` if you want to override local defaults:
+
+```bash
+docker compose up --build
+```
+
+Local defaults:
+
+- Backend API: `http://localhost:8000`
+- Frontend: `http://localhost`
+- Auth mode: `local`
+- Database: SQLite
+
+AWS credentials and Cognito configuration are not required for local development.
 
 ## Backend
 
@@ -22,4 +40,4 @@ The frontend is built with React. It provides a user-friendly interface for play
 
 ## Deployment
 
-The application can be deployed on AWS using Terraform. There are different types of deployment options available, including EC2 instances, Elastic Beanstalk and Fargate. There is also a docker-compose file for local development and testing.
+The application can be deployed on AWS using Terraform. There are different deployment targets available, including EC2 instances, Elastic Beanstalk and Fargate. AWS deployment uses Cognito for authentication and S3 for avatar storage. AWS-specific values should be provided through environment files or deployment variables.
