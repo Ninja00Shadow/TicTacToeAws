@@ -39,8 +39,6 @@ class User(PermissionsMixin, AbstractBaseUser, AbstractBaseModel):
         help_text='Designates whether the user can log into this admin site.'
     )
 
-    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
-
     objects = UserManager()
 
     USERNAME_FIELD = 'username'

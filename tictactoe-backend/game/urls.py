@@ -8,4 +8,5 @@ urlpatterns = [
     path('v1/me', UserProfileAPIView.as_view(), name='my_profile'),
     path('signup', SignupUser.as_view(), name='signup'),
     path('avatar/<str:username>', GetAvatar.as_view(), name='avatar'),
+    path('matches', GetAllMatches.as_view(), name='matches'),
 ]

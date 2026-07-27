@@ -53,6 +53,7 @@ const IndexView = () => {
 
   return (
     <div className="wrapper">
+      <button onClick={() => navigate('/matches')} className='matchesButton'>Matches</button>
       <button onClick={logout} className='logoutButton'>Logout</button>
       <form className="form" onSubmit={handleSubmit}>
         <button type="submit">Play</button>
