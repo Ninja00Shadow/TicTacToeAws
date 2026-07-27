@@ -5,6 +5,7 @@ import IndexView from './components/IndexView';
 import GameView from './components/GameView';
 import Signup from './components/Signup';
 import Login from './components/Login';
+import Matches from './components/Matches';
 
 import { useRefreshTokenService, useSaveRefreshTokenService } from './services/refreshToken';
 
@@ -21,6 +22,7 @@ function App() {
           <Route path="/game/:roomID/:playerName" element={!!cookies['user-token'] ? <GameView /> : <Navigate to="/login" replace />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
+          <Route path='/matches' element={<Matches />} />
         </Routes>
       </Router>
     </CookiesProvider>

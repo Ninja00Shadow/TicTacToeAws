@@ -10,7 +10,7 @@ import AvatarDisplay from './AvatarDisplay';
 const GameView = () => {
   const { roomID, playerName } = useParams();
   console.log(roomID, playerName)
-  const ws_url = !!process.env.REACT_APP_API_IP ? `ws://${process.env.REACT_APP_API_IP}:8000/ws/game/${roomID}/` : `ws://localhost:8000/ws/game/${roomID}/`;
+  const ws_url = !!process.env.REACT_APP_API_IP ? `ws://${process.env.REACT_APP_API_IP}:8000/ws/game/${roomID}/` : `ws://44.205.169.11:8000/ws/game/${roomID}/`;
   const ws = new WebSocket(ws_url);
 
   const [opponentName, setOpponentName] = useState('')
@@ -33,6 +33,7 @@ const GameView = () => {
           ws.send(JSON.stringify({
             event: "boardData_send",
             board: board,
+            player: playerName,
           }))
           addPlayerLetter(elm)
           myTurn = false
