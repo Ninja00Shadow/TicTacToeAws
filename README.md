@@ -4,6 +4,8 @@ This is a simple Tic Tac Toe web application built with Django and React. The ap
 
 Because the application was built for a university course, some infrastructure code is intentionally left in the repository. The local development mode runs without AWS, Cognito, S3 or RDS access.
 
+![](screen-shots/img1.png)
+
 ## Features
 
 - Real-time multiplayer game
