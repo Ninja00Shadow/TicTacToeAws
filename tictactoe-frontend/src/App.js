@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { CookiesProvider, useCookies } from 'react-cookie';
 import IndexView from './components/IndexView';
@@ -6,8 +6,6 @@ import GameView from './components/GameView';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import Matches from './components/Matches';
-
-import { useRefreshTokenService, useSaveRefreshTokenService } from './services/refreshToken';
 
 import './App.css';
 

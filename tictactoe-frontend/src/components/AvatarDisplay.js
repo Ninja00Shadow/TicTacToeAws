@@ -7,27 +7,25 @@ const AvatarDisplay = ({ username }) => {
     const [avatarSrc, setAvatarSrc] = useState('');
 
     useEffect(() => {
-        const fetchAvatar = async () => {
-            try {
-                if (AUTH_MODE === 'cognito') {
-                    setAvatarSrc(AVATAR_BASE_URL ? `${AVATAR_BASE_URL}/avatars/${username}.png` : '');
-                } else {
-                    setAvatarSrc(`${API_URL}/avatar/${username}`);
-                }
-            } catch (error) {
-                console.error('Error fetching avatar:', error);
-            }
-        };
+        if (!username) {
+            setAvatarSrc('');
+            return;
+        }
 
-        fetchAvatar();
+        if (AUTH_MODE === 'cognito') {
+            setAvatarSrc(AVATAR_BASE_URL ? `${AVATAR_BASE_URL}/avatars/${username}.png` : '');
+        } else {
+            setAvatarSrc(`${API_URL}/avatar/${username}`);
+        }
     }, [username]);
 
     return (
         <div>
             {avatarSrc && (
             <img 
+            className="avatar-image"
+            onError={() => setAvatarSrc('')}
             src={avatarSrc} 
-            width={"250px"}
             alt="User Avatar" 
             />
             )}

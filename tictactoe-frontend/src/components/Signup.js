@@ -1,208 +1,169 @@
-import { Button, TextField } from '@mui/material'
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { Button, TextField } from '@mui/material';
 import { CognitoUserAttribute } from 'amazon-cognito-identity-js';
-import axios from '../axiosConfig';
+import { useNavigate } from 'react-router-dom';
+
 import { AUTH_MODE } from '../config';
+import { createProfile, signupLocal } from '../services/api';
+import userPool from '../userpool';
 
+const validateSignup = ({ username, email, password, avatar }) => {
+  const errors = {};
+  if (!username.trim()) {
+    errors.username = 'Username is required';
+  }
+  if (!email.trim()) {
+    errors.email = 'Email is required';
+  }
+  if (!password) {
+    errors.password = 'Password is required';
+  } else if (password.length < 8) {
+    errors.password = 'Password must contain at least 8 characters';
+  }
+  if (!avatar) {
+    errors.avatar = 'Avatar is required';
+  }
+  return errors;
+};
 
-import userpool from '../userpool';
+const getResponseError = (error, fallback) => {
+  const responseError = error.response?.data?.error;
+  return Array.isArray(responseError) ? responseError.join(' ') : responseError || fallback;
+};
+
+const buildProfileFormData = ({ username, email, avatar, password }) => {
+  const formData = new FormData();
+  formData.append('avatar', avatar);
+  formData.append('username', username);
+  formData.append('email', email);
+  if (password) {
+    formData.append('password', password);
+  }
+  return formData;
+};
+
+const signupCognito = (username, password, email) => new Promise((resolve, reject) => {
+  const attributes = [new CognitoUserAttribute({ Name: 'email', Value: email })];
+  userPool.signUp(username, password, attributes, null, (error, data) => {
+    if (error) {
+      reject(error);
+      return;
+    }
+    resolve(data);
+  });
+});
 
 const Signup = () => {
+  const navigate = useNavigate();
 
-    const Navigate = useNavigate();
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState('');
+  const [errors, setErrors] = useState({});
+  const [signupError, setSignupError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [usernameErr, setUsernameErr] = useState('');
-    const [emailErr, setEmailErr] = useState('');
-    const [passwordErr, setPasswordErr] = useState('');
-    const [signupErr, setSignupErr] = useState('');
-
-    const [selectedImage, setSelectedImage] = useState(null);
-    const [imageError, setImageError] = useState('');
-
-    const formInputChange = (formField, value) => {
-        if (formField === "username") {
-            setUsername(value);
-        }
-        if (formField === "email") {
-            setEmail(value);
-        }
-        if (formField === "password") {
-            setPassword(value);
-        }
-    };
-
-    const validation = () => {
-        return new Promise((resolve, reject) => {
-            if (username === '' && email === '' && password === '' && selectedImage === null) {
-                setUsernameErr("Username is Required");
-                setEmailErr("Email is Required");
-                setPasswordErr("Password is required")
-                setImageError("Image is required")
-                resolve({ username: "Username is Required", email: "Email is Required", password: "Password is required", image: "Image is required" });
-            }
-            else if (username === '') {
-                setUsernameErr("Username is Required")
-                resolve({ username: "Username is Required", email: "", password: "", image: "" });
-            }
-            else if (email === '') {
-                setEmailErr("Email is Required")
-                resolve({ username: "", email: "Email is Required", password: "", image: "" });
-            }
-            else if (password === '') {
-                setPasswordErr("Password is required")
-                resolve({ username: "", email: "", password: "Password is required", image: "" });
-            }
-            else if (password.length < 8) {
-                setPasswordErr("Password must contain at least 8 characters")
-                resolve({ username: "", email: "", password: "Password must contain at least 8 characters", image: "" });
-            }
-            else if (selectedImage === null) {
-                setImageError("Image is required")
-                resolve({ username: "", email: "", password: "", image: "Image is required" });
-            }
-            else {
-                resolve({ username: "", email: "", password: "", image: "" });
-            }
-            reject('')
-        });
-    };
-
-    const handleClick = (e) => {
-        setUsernameErr("");
-        setEmailErr("");
-        setPasswordErr("");
-        setImageError("");
-        setSignupErr("");
-        validation()
-            .then((res) => {
-                console.log(res);
-                if (res.username === '' && res.email === '' && res.password === '' && res.image === '') {
-                    console.log('clicked');
-                    let formData = new FormData();
-                    formData.append('avatar', selectedImage);
-                    formData.append('username', username);
-                    formData.append('email', email);
-
-                    if (AUTH_MODE !== 'cognito') {
-                        formData.append('password', password);
-                        axios.post('/signup', formData, {
-                            headers: {
-                                'Content-Type': 'multipart/form-data'
-                            }
-                        }).then(() => {
-                            alert('User Added Successfully');
-                            Navigate('/login');
-                        }).catch(error => {
-                            console.error('Error uploading data:', error);
-                            const responseError = error.response?.data?.error;
-                            const message = Array.isArray(responseError) ? responseError.join(' ') : responseError;
-                            setSignupErr(message || "Couldn't sign up");
-                        });
-                        return;
-                    }
-
-                    const attributeList = [
-                        new CognitoUserAttribute({
-                            Name: 'email',
-                            Value: email,
-                        })
-                    ];
-
-                    userpool.signUp(username, password, attributeList, null, (err, data) => {
-                        if (err) {
-                            console.log(err);
-                            alert("Couldn't sign up");
-                        } else {
-                            console.log(data);
-
-                            axios.post('/signup', formData, {
-                                headers: {
-                                    'Content-Type': 'multipart/form-data'
-                                }
-                            }).then(res => {
-                                console.log(res);
-                            }).catch(error => {
-                                console.error('Error uploading data:', error);
-                                const responseError = error.response?.data?.error;
-                                const message = Array.isArray(responseError) ? responseError.join(' ') : responseError;
-                                setSignupErr(message || "Couldn't create user profile");
-                            });
-
-                            alert('User Added Successfully');
-                            Navigate('/');
-                        }
-                    });
-                }
-            }, err => console.log(err))
-            .catch(err => console.log(err));
+  useEffect(() => {
+    if (!selectedImage) {
+      setPreviewUrl('');
+      return undefined;
     }
 
-    return (
-        <div className="signup">
+    const objectUrl = URL.createObjectURL(selectedImage);
+    setPreviewUrl(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [selectedImage]);
 
-            <div className='form'>
-                <h1>Upload your avatar</h1>
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const validationErrors = validateSignup({ username, email, password, avatar: selectedImage });
+    setErrors(validationErrors);
+    setSignupError('');
+    setSuccessMessage('');
 
-                {selectedImage && (
-                    <img
-                        alt='not found'
-                        width={"250px"}
-                        src={URL.createObjectURL(selectedImage)}
-                    />
-                )}
+    if (Object.keys(validationErrors).length > 0) {
+      return;
+    }
 
-                <br />
-                <br />
+    setIsSubmitting(true);
+    try {
+      if (AUTH_MODE === 'cognito') {
+        await signupCognito(username, password, email);
+        await createProfile(buildProfileFormData({ username, email, avatar: selectedImage }));
+        setSuccessMessage('Account created. You can log in after confirming it in Cognito.');
+      } else {
+        await signupLocal(buildProfileFormData({ username, email, avatar: selectedImage, password }));
+        setSuccessMessage('Account created. You can log in now.');
+        navigate('/login');
+      }
+    } catch (error) {
+      setSignupError(getResponseError(error, "Couldn't sign up."));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
-                <input
-                    type='file'
-                    name='myImage'
-                    onChange={(event) => {
-                        console.log(event.target.files[0]);
-                        setSelectedImage(event.target.files[0])
-                    }}
-                />
-                {imageError && <div style={{ color: 'red' }}>{imageError}</div>}
+  return (
+    <main className="auth-view app-shell">
+      <form className="auth-card" onSubmit={handleSubmit}>
+        <p className="eyebrow">New player</p>
+        <h1>Create account</h1>
 
+        <label className="avatar-picker">
+          <span>Avatar</span>
+          {previewUrl ? (
+            <img alt="Selected avatar preview" src={previewUrl} />
+          ) : (
+            <div className="avatar-placeholder">Choose image</div>
+          )}
+          <input
+            accept="image/*"
+            onChange={(event) => setSelectedImage(event.target.files?.[0] || null)}
+            type="file"
+          />
+        </label>
+        {errors.avatar && <p className="form-error">{errors.avatar}</p>}
 
+        <TextField
+          error={Boolean(errors.username)}
+          helperText={errors.username}
+          label="Username"
+          onChange={(event) => setUsername(event.target.value)}
+          required
+          value={username}
+        />
+        <TextField
+          error={Boolean(errors.email)}
+          helperText={errors.email}
+          label="Email"
+          onChange={(event) => setEmail(event.target.value)}
+          required
+          type="email"
+          value={email}
+        />
+        <TextField
+          error={Boolean(errors.password)}
+          helperText={errors.password}
+          label="Password"
+          onChange={(event) => setPassword(event.target.value)}
+          required
+          type="password"
+          value={password}
+        />
+        <Button disabled={isSubmitting} type="submit" variant="contained">
+          {isSubmitting ? 'Creating...' : 'Sign up'}
+        </Button>
+        {signupError && <p className="form-error">{signupError}</p>}
+        {successMessage && <p className="form-success">{successMessage}</p>}
+        <button className="link-button" onClick={() => navigate('/login')} type="button">
+          Back to login
+        </button>
+      </form>
+    </main>
+  );
+};
 
-                <div className="formfield">
-                    <TextField
-                        value={username}
-                        onChange={(e) => formInputChange("username", e.target.value)}
-                        label="Username"
-                        helperText={usernameErr}
-                    />
-                </div>
-                <div className="formfield">
-                    <TextField
-                        value={email}
-                        onChange={(e) => formInputChange("email", e.target.value)}
-                        label="Email"
-                        helperText={emailErr}
-                    />
-                </div>
-                <div className='formfield'>
-                    <TextField
-                        value={password}
-                        onChange={(e) => { formInputChange("password", e.target.value) }}
-                        type="password"
-                        label="Password"
-                        helperText={passwordErr}
-                    />
-                </div>
-                <div className='formfield'>
-                    <Button type='submit' variant='contained' onClick={handleClick}>Signup</Button>
-                </div>
-                {signupErr && <div style={{ color: 'red' }}>{signupErr}</div>}
-            </div>
-
-        </div>
-    )
-}
-
-export default Signup
+export default Signup;

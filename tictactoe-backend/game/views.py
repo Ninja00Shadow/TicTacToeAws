@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 from django.http import FileResponse
 from django.shortcuts import HttpResponse, redirect
 from django.utils.text import get_valid_filename
@@ -218,11 +219,17 @@ class GetAllMatches(APIView):
     authentication_classes = []
 
     def get(self, request):
-        rooms = Room.objects.all()
+        username = request.query_params.get('username')
+        if not username:
+            return Response(data={'matches': []}, status=status.HTTP_200_OK)
+
+        rooms = Room.objects.filter(
+            Q(player1__username=username) | Q(player2__username=username),
+            player2__isnull=False,
+        ).order_by('-id')
 
         matches = []
         for room in rooms:
-            if room.player2 is not None:
-                matches.append({"player1": room.player1.username, "player2": room.player2.username, "winner": room.who_won.username if room.who_won else None})
+            matches.append({"player1": room.player1.username, "player2": room.player2.username, "winner": room.who_won.username if room.who_won else None})
 
         return Response(data={"matches": matches}, status=status.HTTP_200_OK)
